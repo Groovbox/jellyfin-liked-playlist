@@ -1,0 +1,12 @@
+{"accounts" : [
+    {
+        "Server": "https://jellyfin.mydomain.com",
+        "Username":"johndoe",
+        "Pw": "Iliekmypassword:)"
+    },
+    {
+        "Server": "https://jellyfin.mydomain.com",
+        "Username":"johndoe2",
+        "Pw": "Iliekmypasdsfgfsword:)"
+    }
+]}
