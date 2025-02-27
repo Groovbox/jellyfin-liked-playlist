@@ -1,9 +1,13 @@
 import requests
+from pathlib import Path
+import base64
 
-def get_headers(token:str=None) -> dict:
+def get_headers(token:str=None, content_type=None) -> dict:
     headers = {
     'authorization': f'MediaBrowser Client="Octo", Device="Chrome", DeviceId="TW96aWxsYS81LjAgKFgxMTsgTGludXggeDg2XzY0KSBBcHBsZVdlYktpdC81MzcuMzYgKEtIVE1MLCBsaWtlIEdlY2tvKSBDaHJvbWUvMTMxLjAuMC4wIFNhZmFyaS81MzcuMzZ8MTczODE0NDMzNjc4NQ11", {'Token="'+token+'", ' if token else ''} Version="10.10.3"',
     }
+    if content_type is not None:
+        headers['Content-Type'] = content_type
     return headers
 
 
@@ -96,3 +100,22 @@ def add_items_to_playlist(account:JellyfinAccount, playlist_id, items:list[str])
 
     print(resp.status_code)
 
+def update_playlist_icon(account:JellyfinAccount, playlist_id:str, image_path:Path) -> int:
+    with open(image_path, "rb") as image_file:
+        img_data = image_file.read()
+
+    if str(image_path).endswith("jpg"):
+        content_type = "image/jpg"
+    elif str(image_path).endswith("png"):
+        content_type = "image/png"
+
+    # Encode img_data with base64
+    encoded_img_data = base64.b64encode(img_data)
+
+
+    endpoint_url = account.server + "/Items/" + playlist_id + "/Images/Primary"
+
+    print(encoded_img_data)
+
+    resp = requests.post(endpoint_url, headers=get_headers(account.token, content_type=content_type), data=encoded_img_data)
+    return resp.status_code
