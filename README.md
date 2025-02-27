@@ -1,5 +1,7 @@
-# jellyfin-liked-playlist
+<div align="center"><img src="playlist_cover.png" height=100>
 
+<h1> Jellyfin Liked Songs Playlist </h1>
+</div>
 A virtual playlist that is linked to "Favourite" tracks on jellyfin
 
 ## Setting Up
