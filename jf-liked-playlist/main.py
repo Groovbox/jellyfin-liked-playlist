@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import json
 from jellyfin import *
 import random
+from config import Config
 
 user_liked_playlist_map:dict = {}
 
@@ -30,7 +31,7 @@ def sync_playlist():
             print("Liked Songs playlist created")
         
             # Update image
-            update_playlist_icon(account, lkd_pl_id, Path("playlist_cover.png"))
+            update_playlist_icon(account, lkd_pl_id, Config().liked_songs_playlist_icon)
         
         # Match songs up
         # get all favorite tracks first
@@ -48,8 +49,6 @@ def sync_playlist():
         add_items_to_playlist(account, lkd_pl_id, missing)
 
         user_liked_playlist_map[account] = lkd_pl_id
-
-
 
 app = FastAPI()
 
@@ -96,4 +95,4 @@ async def post_request(item: Item):
 if __name__ == '__main__':
     sync_playlist()
     import uvicorn
-    uvicorn.run(app, host="192.168.1.16", port=7079)
+    uvicorn.run(app, host=Config().host, port=Config().port)
