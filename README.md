@@ -2,7 +2,10 @@
 
 <h1> Jellyfin Liked Songs Playlist </h1>
 </div>
-A virtual playlist that is linked to "Favourite" tracks on jellyfin
+
+A virtual playlist that is linked to "Favourite" tracks on jellyfin.
+
+![Jellyfin web client](docs/img/3_webclient.png)
 
 ## Setting Up
 
@@ -92,3 +95,7 @@ And that's it, there should be a "Liked Songs" playlist in your library now!!!
 ### Some Footnotes
 
 I believe this would be a much more clean and simple thing if it were a Jellyfin plugin, however I do not know how to code in C# so this was the quickest and easiest way I could come up with that worked well with my setup!
+
+I made this plugin specifically so that I could use it with Finamp which currently doesn't provide a better way to play and manage all of your favorite tracks.
+
+![Finamp Screenshot](docs/img/2_finamp_ss.jpg.jpeg)
