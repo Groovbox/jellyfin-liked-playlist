@@ -93,10 +93,17 @@ def add_items_to_playlist(account:JellyfinAccount, playlist_id, items:list[str])
         ids_str+=item
         if i != len(items)-1:
             ids_str+=","
+    print(ids_str)
     
     endpoint_url = account.server + f"/Playlists/{playlist_id}/Items?ids={ids_str}&userId={account.userId}"
-    print(endpoint_url)
     resp = requests.post(endpoint_url, headers=get_headers(account.token))
+
+    print(resp.status_code)
+
+def remove_item_from_playlist(account:JellyfinAccount, playlist_id, itemId:str):
+    
+    endpoint_url = account.server + f"/Playlists/{playlist_id}/Items?EntryIds={itemId}"
+    resp = requests.delete(endpoint_url, headers=get_headers(account.token))
 
     print(resp.status_code)
 

@@ -2,8 +2,13 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import json
 from jellyfin import *
+import random
+
+user_liked_playlist_map:dict = {}
 
 def sync_playlist():
+    global user_liked_playlist_map
+
     with open("accounts.json") as f:
         data = json.loads(f.read())
     
@@ -39,24 +44,51 @@ def sync_playlist():
         for track in fav_tracks:
             if track not in pl_tracks:
                 missing.append(track)
-            else:
-                print("Yes")
         
         add_items_to_playlist(account, lkd_pl_id, missing)
+
+        user_liked_playlist_map[account] = lkd_pl_id
+
 
 
 app = FastAPI()
 
 class Item(BaseModel):
-    item_id: str
-    name: str
-    isLiked: str
-    saveReason: str
-    user_id: str
+    item_id: str|None
+    name: str|None
+    saveReason: str|None
+    user_id: str|None
+
+def update_playlist(user_id:str, item_id:str):
+    user_id = user_id.replace("-", "")
+    item_id = item_id.replace("-", "")
+    account:JellyfinAccount = None
+    for _account in user_liked_playlist_map.keys():
+        if _account.userId == user_id:
+            account = _account
+            break
+    
+    if account is None:
+        print("Could not find account")
+        return
+    
+    liked_songs_playlist:str = user_liked_playlist_map[account]
+    liked_tracks = get_playlist_tracks(account, liked_songs_playlist)
+
+    if item_id in liked_tracks:
+        # Remove that track from playlist
+        remove_item_from_playlist(account, liked_songs_playlist, item_id)
+        print("Removed", item_id, "from Liked Songs Playlist")
+    else:
+        # Add that track in playlist
+        add_items_to_playlist(account, liked_songs_playlist, [item_id])
+        print("Added", item_id, "to Liked Songs Playlist")
+
 
 @app.post("/post")
 async def post_request(item: Item):
     print(item)
+    update_playlist(item.user_id, item.item_id)
     return {"message": "Data received", "data": item}
 
 
