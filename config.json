@@ -1,5 +1,5 @@
 {
-    "HOST": "192.168.1.16",
+    "HOST": "127.0.0.1",
     "PORT": 7079,
     "LIKED_SONGS_PLAYLIST_ICON":"playlist_cover.png"
 }

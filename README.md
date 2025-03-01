@@ -92,6 +92,15 @@ And that's it, there should be a "Liked Songs" playlist in your library now!!!
 > <br>Do not manually add items to the "Liked Songs" playlist.<br>
 > Always use the heart button to add or remove songs!
 
+### Running as a Service
+
+`jf-liked-songs.service` is a systemd service unit that can be used for running this on startup. Edit it and ensure it has all the correct values then copy it:
+
+```sh
+sudo cp jf-liked-songs.service /etc/systemd/system/jf-liked-songs.service
+sudo systemctl enable --now jf-liked-songs.service
+```
+
 ### Some Footnotes
 
 I believe this would be a much more clean and simple thing if it were a Jellyfin plugin, however I do not know how to code in C# so this was the quickest and easiest way I could come up with that worked well with my setup!

@@ -1,0 +1,15 @@
+[Unit]
+Description=Jellyfin Liked Playlist Updater
+After=network.target jellyfin.service
+Requires=jellyfin.service
+
+[Service]
+Type=simple
+WorkingDirectory=/path/to/repository/root
+ExecStart=/path/to/repository/root/.env/bin/python main.py
+Restart=on-failure
+User=USER
+Group=USER
+
+[Install]
+WantedBy=default.target
