@@ -5,13 +5,16 @@ import base64
 from config import Config
 
 def get_headers(token:str=None, content_type=None) -> dict:
+    auth_str = f'MediaBrowser Client="Octo", Device="Chrome", DeviceId="TW96aWxsYS81LjAgKFgxMaHJvbWUvMTMxLjAuMCNjc4NQ11", Version="10.10.3"'
+    if token:
+        auth_str+= f', Token="{token}"'
+
     headers = {
-    'authorization': f'MediaBrowser Client="Octo", Device="Chrome", DeviceId="TW96aWxsYS81LjAgKFgxMTsgTGludXggeDg2XzY0KSBBcHBsZVdlYktpdC81MzcuMzYgKEtIVE1MLCBsaWtlIEdlY2tvKSBDaHJvbWUvMTMxLjAuMC4wIFNhZmFyaS81MzcuMzZ8MTczODE0NDMzNjc4NQ11", {'Token="'+token+'", ' if token else ''} Version="10.10.3"',
+    'authorization': auth_str,
     }
     if content_type is not None:
         headers['Content-Type'] = content_type
     return headers
-
 
 
 class JellyfinAccount:
