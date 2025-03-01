@@ -22,13 +22,15 @@ def sync_playlist():
         print("Processing for ", account.username)
         all_playlists = get_playlists(account=account)
 
-        if "Liked Songs" in all_playlists.keys():
+        playlist_name = f'Favourites: {account.username}'
+
+        if playlist_name in all_playlists.keys():
             print("Playlist exists")
-            lkd_pl_id = all_playlists['Liked Songs']
+            lkd_pl_id = all_playlists[playlist_name]
         
         else:
-            lkd_pl_id = create_playlist(account, "Liked Songs")
-            print("Liked Songs playlist created")
+            lkd_pl_id = create_playlist(account, playlist_name)
+            print("Favourites playlist created")
         
             # Update image
             update_playlist_icon(account, lkd_pl_id, Config().liked_songs_playlist_icon)
