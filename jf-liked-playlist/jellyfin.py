@@ -1,6 +1,7 @@
 import requests
 from pathlib import Path
 import base64
+import time
 
 from config import Config
 
@@ -87,17 +88,22 @@ def get_playlist_tracks(account:JellyfinAccount, playlist_id:str) -> list[str]:
     return resp.json()["ItemIds"]
 
 def add_items_to_playlist(account:JellyfinAccount, playlist_id, items:list[str]):
-    ids_str = ""
-    for i,item in enumerate(items):
-        ids_str+=item
-        if i != len(items)-1:
-            ids_str+=","
-    print(ids_str)
-    
-    endpoint_url = account.server + f"/Playlists/{playlist_id}/Items?ids={ids_str}&userId={account.userId}"
-    resp = requests.post(endpoint_url, headers=get_headers(account.token))
+    # add in batches to avoid 414 error
+    batch_size = 100
+    for i in range(0, len(items), batch_size):
+        batch = items[i:i+batch_size]
+        ids_str = ""
+        for i,item in enumerate(batch):
+            ids_str+=item
+            if i != len(batch)-1:
+                ids_str+=","
+        print(ids_str)
+        
+        endpoint_url = account.server + f"/Playlists/{playlist_id}/Items?ids={ids_str}&userId={account.userId}"
+        resp = requests.post(endpoint_url, headers=get_headers(account.token))
 
-    print(resp.status_code)
+        print(resp.status_code)
+        time.sleep(1)
 
 def remove_item_from_playlist(account:JellyfinAccount, playlist_id, itemId:str):
     
